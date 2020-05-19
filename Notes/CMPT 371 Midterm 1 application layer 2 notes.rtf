@@ -1,0 +1,114 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf200
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 Application layer 2\
+\
+Problems with single server: single point of failure and bottle neck\
+Client side caching not shared!\
+\
+Web cache: satisfy client request without directly involving origin server\
+Proxy server requests from origin server, client requests from proxy server\
+\
+Proxy installed by ISP\
+Web caching reduces client request response time and traffic on institution\'92s access point (base point)\
+\
+Caching will reduce the need for requests to the server (so utilization of access link is less saving time\
+\
+Problem with caching is it takes up extra space/machine(proxy)\
+And it may be inconsistent with out of date objects\
+\
+Conditional get (check if client side cached object is modified on the server side) if it is, then return a new object from the server, else, don\'92t return anything\
+\
+Hit ratios independent.  5% of 10% = 0.5% chance to miss. joint HR = 99.5%\
+\
+Similar are the content distribution networks (CDNs) CDN providers provide service to content providers like Netflix.  CDN replicates customers content in CDN servers.  When provider updates content, CDN updates servers.  CDN server is kind of like a proxy server so that users don\'92t have to go all the way to origin server to get content\
+\
+http request for nearby CDN server faster than http request for origin server\
+\
+Can company uses its authoritative DNS server to route re redirect requests\
+\
+Query from ISP goes to authoritative DNS server, server determines ISP from query and uses map to determine best CDN server\
+\
+Caching vs can is pull:passive vs push active\
+\
+Server always on + permanent IP address\
+Clients communicate with server, dynamic IP addresses. Do not communicate directly with each other\
+\
+P2P architecture\
+Peers intermittently connected and change ip addresses\
+Self scalability new peers bring new resources\
+No always on server\
+Arbitrary end systems communicate\
+\
+A peer\'92s peer is both a web client and a transient web server!\
+\
+All peers are servers = highly scalable\
+\
+QUESTION: how much time does it take to distribute file from one server to N peers\
+\
+File distribution for server client: server must upload N copies of F\
+So server transmission is NF/us where us is the server upload time\
+\
+Time to distribute F to N clients using distribution server client is the max of server transmission and the download \
+\
+Max(NF/us, F/di) where di is the slowest download speed for the clients\
+\
+Dp2p = server has to upload at least one copy so F/us. Client must down a copy so F/di to download but they must also upload\
+\
+All clients as a whole must download NF bits.  Fastest overall download rate = combined upload rate of everything\
+\
+So distribution time p2p = max(F/us, F/dmin, NF/us+ui)\
+\
+P2P better in that the more peers you have, the lower the average distribution time will be\
+\
+Tracker - tracks peers participating in a torrent\
+Torrent - group of peers doing p2p file sharing (exchanging chunks of the file)\
+\
+Peer joins torrent, registers with tracker to get list of peers and connects to subset of peers called neighbours.\
+\
+Peers may come and go THIS IS CALLED CHURNING!\
+\
+Once peer has entire file, it may leave\
+\
+Requesting: at any given time, different peers have different chunks\
+Peer sends requests to peer for missing chunks in order of rarest chunk first\
+\
+Sending: peer evaluates 4 other peers they can send their chunks to at the highest rate, re evaluate top 4 every 10 seconds and every 30 seconds, randomly select another peer.\
+\
+Top 4 is the 4 peers a peer is sending chunks to at the fastest rate.  Reevaluate this top 4 every 10 seconds and choose another peer every 30. That newly chosen peer may join the top 4 \
+\
+High upload rate better trading partners, higher download rate\
+\
+Index in p2p system maps info to peer location (location is IP address and port number)\
+\
+Centralized directory single point of failure and performance bottleneck\
+Peer informs central server when it connects\
+\
+File transfer is centralized but locating content is centralized\
+\
+Decentralized directory group leaders have peers, group leader tracks content in its children.\
+Group leader may query other group leaders\
+\
+Advantages - no centralized directory server \
+\
+Disadvantages group leaders get overloaded\
+Bootstrap node needed\
+\
+QUERY FLOODING: use bootstrap node to learn about others, send query to neighbours they forward, if peer has object, sends message back \
+\
+Content addressing (hash routing)\
+\
+Consistent having: key stored at successor. Key = hashed value of file identifier\
+Unique id is usually hash of file or IP address\
+\
+Finger table: entry I is first node that succeeds or equals n + 2^I or its finger points 1/2^n-i around the ring\
+\
+Chord routing:\
+Peer sends query to another peer. For file id.  Receiving peer calculates the key which is the hash id\
+Checks whether the key is stored locally. If not forwards the query to largest node in successor table that does not exceed the key\
+\
+}

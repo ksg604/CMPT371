@@ -1,0 +1,206 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf400
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 data link layer - transfer datagram from one node to another over a link\
+link layer is implemented in the network adapter or ethernet card\
+\
+datagram will be transferred by different link protocols over different links\
+\
+and each link protocol provides different services (ex. may or may not provide reliable data transfer)\
+\
+think of it as a trip.  the different transportation modes are different link layer protocols.  tourist is datagram, travel agent = routing algorithm, transport segment is communication link (the link itself (the route))\
+\
+link layer services provide reliable delivery between nodes at the link level instead of end-end\
+\
+if an error in a datagram, modify bit value of EDC field to signal that the datagram has bit errors\
+\
+parity bit: odd number of 1s is 1\
+even is 0\
+\
+two types of links \
+- 1: point to point\
+- 2: broadcast (shared wire or medium)\
+- traditional ethernet\
+- satellite\
+- 802.11 wireless local area network\
+\
+basically 1 to 1 vs broadcast\
+\
+goal for MAC: simple no special node to coordinate transmissions and no synchronization of clocks,slots\
+\
+mac protocols:\
+\
+- partition channel for each node \
+- random access (don\'92t divide channel, allow collisions and recover from them)\
+- speak only if token is at hand (tightly coordinate shared access to avoid collisions)\
+\
+TDMA - each station allocated a fixed length slot.\
+\
+access to channel is in rounds.  # slots = number of stations\
+a round will include slots for each station.  stations that want to send pkts will have their datagrams in a slot in a round\
+\
+FDMA - frequency divison multiple access\
+- channel spectrum is divided into frequency bands instead of rounds\
+instead of being assigned a different slot, each station is assigned a frequency\
+\
+CDMA \
+-used mostly in wireless broadcast channels (cellular, satellite)\
+-all users share same frequency but have different chipping sequence or \'93key\'94 to encode their data\
+-for multiple users, you combine the inner product of the encoded signals and send that through the channel, the receiver will use the respective chipping sequence to determine which message comes from which user\
+\
+different receivers for different codes\
+decode using the respective code for different receivers (receiver 1 corresponds to sender 1)\
+\
+frequency hopping origin of CDMA, transmit radio signals by switching between frequency channels using sequence known to both sender and receiver\
+\
+mac protocols:\
+divide channel for each node\
+random access\
+speak only if token at hand\
+\
+1) slotted aloha\
+\
+-when node obtains new frame, it transmits in the next slot\
+-if there is no collision, node can send new frame in the next slot\
+- if there is a collision, node retransmits frame in each subsequent slot with prob p until success\
+\
+slotted aloha is highly decentralized\
+also, node can send at full rate of channel\
+\
+the efficiency is the long run fraction of successful slots\
+\
+node\'92s probability to transmit a frame in a slot\
+the probability that a node has success in a slot if p(1-p)^N-1\
+prob that a node has success if Np(1-p)^N-1\
+\
+for max efficiency with N nodes, we find p that maximizes Np(1-p)^N-1\
+\
+for max efficiency with many nodes, we find the limit as N approaches infinity\
+\
+max effiiency ends up becoming 1/e = 0.37 so the channel is used for successful transmissions 37% of the time\
+\
+CSMA: carrier sense multiple accesses aka listen before transmit\
+\
+channel partitioning (TDMA, FDMA, CDMA) is best for high load share channel efficienctly\
+bad for low load, bandwidth is allocated fractionally even if only one active node\
+\
+random access mac protocols:\
+- efficient at low loads because a single node can utilize channel bandiwdth\
+- high load, collision overhead\
+\
+taking turns protocol (CSMA) carrier sense multiple access\
+not practical\
+\
+taking turns types\
+1. polling, a master node invites slave nodes to transmit in turn, asks nodes if they have frame to send, all administrated by master node, polling overhead, latency\
+\
+2. token passing, control token passed from one node to another sequentially, token message\
+conerns are single point of failure(token) and token overhead\
+\
+CSMA is still random access, listen before transmit\
+\
+traditional ethernet uses CSMA\
+\
+the adapter does not transmit if it senses some other adapter is transmitting (carrier sense)\
+\
+transmitting adapter aborts transmission if it detects some other adapter is transmitting (collision detection)\
+\
+random access because an adapter waits a random time before retransmission (random access)\
+\
+manchester encoding for ethernet, each bit has a transition ( think of a graph)\
+-the transition allows clocks in sending and receiving nodes to synchronize to each other\
+-there is no need for a centralized global clock among nodes\
+\
+manchester allows clocks in sending and receiving nodes to synchronize with each other\
+-think binary encoding vs manchester encoding\
+\
+wireless links and LANs.  \
+\
+802.11b\
+802.11a\
+802.11g\
+802.11n\
+\
+basic service set (BSS) contains wireless hosts and a base station or access point\
+\
+ad hoc network approach: wireless hosts communicate with each other.  Applications include laptop conference meeting, battlefield (soldiers communicating with each other\
+\
+collision avoidance, if two nodes hidden from each other, wasted bandwidth for long duration\
+\
+solution is network allocation vector (NAV) nav tracks reservation interval\
+\
+collision avoidance, CTS- RTS exchange, RTS packet (request to send) CTS (clear to send) packet notifies all other (possibly hidden nodes)\
+\
+hidden nodes do not transmit for specified duration (specified by the RTS packet): NAV\
+\
+NAV: network allocation vector\
+\
+bluetooth can be interfered by microwaves, interference from wireless lans, digital cordless phones, it is omnidirectional, low power smlal radius (10-100 metres) technology\
+\
+MAC protocol supports error correction, ARQ\'92\
+\
+\
+principles behind data link layer services, \
+- error correction, detection\
+- sharing broadcast channel, multiple access\
+- link layer addressing, ARP\
+\
+link layer technologies: ethernet, LAN\
+\
+DONE WITH link layer\
+\
+DHCP = dynamic host configuration protocol (network layer) routers run this\
+\
+DHCP server will give client its IP, first hop router IP, and the name and address of DNS server\
+\
+before sending HTTP request, need IP address of www.google.com (DNS)\
+create DNS query.\
+\
+to send a frame to router, need MAC address of router interface: need address resolution protocol for this\
+\
+before HTTP, you need DNS, before DNS you need ARP\
+\
+intra AS protocols\
+\
+RIP: routing information protocol (distance vector)\
+OSPF: open shortest path first protocol (link state)\
+\
+DNS query inside IP datagram, forwarded via LAN switch to 1st hop router/. IP datagram forwarded from campus network to comcast network being routed by RIP, OSPF, BGP routing protocols (between routers) and is demultiplexed at DNS server.  DNS server replies to client with IP address of www.google.com\
+\
+TCP connection carrying HTTP, to send HTTP request, client opens TCP socket.  TCP SYN segment routed to web server, SYNACK response, TCP connection establishment.  \
+\
+HTTP request sent into TCP socket, IP datagram containing HTTP request routed to www.google.com\
+\
+TCP socket to establish connection\
+\
+web server responds with HTTP reply containing web page\
+\
+IP datagram containing HTTP reply routed back to client\
+\
+switching: A to A\'92 can transmit simultaneously without collisions bc each link is its own collision domain\
+\
+each switch has a switch table (looks like a routing table) which includes MAC address of host and interface to reach host\
+\
+a hub connects LAN segments or subnets.  extends max distance between nodes\
+\
+switch only records an interface, host pair in the switch table when it receives a frame from that particular host.  it forwards the frame to the destination host, but if the destination host is not in the table, it forwards the frame to all other interfaces other than the source interface (assuming that the destination is not in the same hub as the source)\
+\
+if the destination is in the table, switch forwards the frame to that particular interface\
+\
+filtering and forwarding for switch\
+\
+if dest in the same segment (LAN segment) as source, drop that frame\
+\
+switch filters packets so same LAN segment frames are usually not forwarded onto other LAN segments.\
+\
+the segments become separate collision domains\
+\
+with a hub, individual collision domains become large. but with switch, there is traffic isolation\
+\
+switches have plug and play and traffic isolation, hubs have plug and play, routers have traffic isolation and optimal routing\
+\
+}

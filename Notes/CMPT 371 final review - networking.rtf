@@ -1,0 +1,137 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf400
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 Dijkstra\'92s algorithm time complexity:  O(n^2) but possible in O(nlogn)\
+\
+For bellman ford, duz = min(cost of its edges + distance from those vectors to destination node)\
+the minimum node is the next hop in the shortest path (this is the order) forwarding table\
+\
+THIS IS THE ORDER\
+\
+each node maintains a distance vector for itself and its neighbors\
+\
+each node will wait for new dist vector estimate from its neighbor (nodes periodically send these estimates to each other), then recompute estimates, if the distance to any destination has changed, notify neighbors\
+\
+detecting link cost, update DV, notify neighbor, neighbor updates it table, computes new least cost, notify back.  if a nodes least cost does not change, do not notify\
+\
+IP v4 = identifer for host, router interface.  router interface is link to a host.  host may have multiple connections to diff routers\
+\
+ethernet interfaces are connected by switches, wifi interfaces are connected by wifi base station\
+\
+devices can interface each other with same subnet part of IP address (subnets are subportions of the network)\
+\
+detach interface from host or router, create isolated network.  each isolated network is a subnet\
+\
+router can be a subnet\
+\
+problem with classful addressing is inefficient use of address space, allocates more addresses than itn eeds to\
+\
+CIDR: classless interdomain routing\
+\
+network portion of address can change\
+format: a.b.c.d/x where is is # bits in network portion\
+\
+format 2: address + mask\
+\
+CIDR: classless interdomain routing\
+\
+ip address can be hardcoded by host system admin, or dynamically created with dynamic host configuration protocol\
+\
+goal: allows the host to dynamically obtain its IP address for server when it joins the network\
+\
+- re use of addresses, only holds address while connected\
+-support for mobile users\
+\
+stages\
+\
+DHCP discover (host finds DHCP server)\
+DHCP offer (DHCP server present, responds to DHCP discover)\
+DHCP request (host requests ip address)\
+DHCP ack (DHCP server sends address)\
+\
+how does DHCP server get network part of ip address?  it gets allocated a portion of its ISP address space\
+\
+DHCP server gets a portion of its ISP address block\
+\
+ISP gets block of addresses from ICANN, internet corporation for assigned names and numbers\
+-allocates addresses, manages DNS, assigns domain names, resolves disputes\
+\
+how much overhead with TCP? 20 bytes of TCP, 20 bytes of IP = 40 bytes + app layer overhead\
+\
+NAT: translate local network IP address to just one ip address as far as outside world is concerned\
+\
+ISP does not need to allocate addresses in order for hosts inside a NAT to communicate with outside world.   can change the addresses of hosts without notifcation of outside world.  can change ISP without changing addresses of local devices.\
+\
+cannot explicitly address devices behind a NAT (security)\
+\
+nat router must replace host source ip and port # to a new nat ip address and new port #\
+remote clients/servers will use this as their dest if they want to communicate with the source\
+\
+remember in translation table every source ip address and its port # to its relative NAT ip address and new port number\
+\
+incoming datagrams, replace the respective NAT ip address and new port number to the source ip address and old port # as per the NAT table\
+\
+NAT has a 16-bit port number field so there can be 60,000 + connections with a single LAN side address\
+\
+gateway routers run inter-AS routing with other routers in the same AS and also other gateway routers from outside the AS, (responsible for routing to destinations outside AS\
+\
+inter-AS gateway router \
+intra-AS normal routers in the same AS\
+\
+global internet consists of AS connected with each other\
+\
+Stub AS: one connection to other AS\
+multihomed AS: multiple connection to other AS\
+transit AS: provider connecting AS together.\
+\
+two-level routing:\
+intra-AS: the administrator of the network is responsible to choice of routing algorithm within network\
+inter-AS: unique standard for inter-AS routing\
+\
+intra-AS: interior\
+inter-AS: exterior\
+\
+why hierarchical?  (N/M)^2 for non-gateway, (N/M)^2 + M^2 for gateway.  Non-hierarchal is O(N^2)\
+\
+Intra-AS also known as interior gateway protocol (IGP)\
+\
+RIP(routing information protocol)\
+- distance vector\
+\
+OSPF (open shortest path first) protcol\
+- link state\
+\
+BGP protocol for inter-state routing\
+\
+why different routing protocols?\
+\
+- inter-AS admin wants control over how its traffic is routed\
+- intra-AS single admin so no policy decisions needed\
+\
+think of each AS as an ISP (shaw for one AS, telus for another, bell for another) SHAW may use a certain intra-AS routing protocol for its routers such as RIP (routing information protocol) and use distance vector.  Telus may use OSPF (open shortest path first). \
+\
+-reason why different intra/inter-AS routing is because for intra-AS, there is a single admin so no policy decisions needed (just can use one just because)\
+\
+-for inter-AS, admin wants control (the same admin) over how its traffic is routed\
+\
+ipV6 datagram has a priority header portion (faster forwarding and speed processing). header changes and a new anycast address which can route to best of several replicated servers\
+\
+ipv6 has a fixed 40 bytes header\
+\
+advantages: priority, flow label (datagrams in same flow), next header (identify upper layer protocol for data)\
+\
+checksum is removed entirely in ipv6, options allowed but defined outside of header in next header field, ICMP replaced by ICMPv6, additional messages such as \'93packet too big\'94\
+\
+how do we accomodate for having for ipv4 and ipv6 routers?  \
+\
+dual stack: adjacent routers \'93translate\'94 between formats (they have dual stack (v6,v4) can translate between formats\
+\
+-problems with dual stack? lost information and complexity\
+\
+tunneling: ipv6 carried as payload in ipv4 datagram among ipv4 routers\
+\
+}

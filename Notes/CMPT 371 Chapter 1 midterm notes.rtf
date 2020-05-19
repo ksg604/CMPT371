@@ -1,0 +1,300 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf200
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 LucidaGrande;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red251\green0\blue7;}
+{\*\expandedcolortbl;;\cssrgb\c0\c1\c1;\cssrgb\c99940\c0\c0;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 Network edge\
+- hosts (web, email)\
+- client/server model\
+- peer-peer model\
+\
+Connection oriented service - the goal is data transfer between end systems (like email)\
+\
+ (TCP protocol is the internets connection oriented service) \
+- reliable data transfer, loss of data acknowledgement and retransmission\
+Flow control and congestion control\
+\
+UDP is the opposite with unreliable data transfer, no flow and congestion control\
+\
+TCP apps - HTTP, FTP, SMTP\
+UDP - streaming media, DNS\
+\
+Network core - mesh of interconnected routers.\
+\
+Big question is: how is data transferred through the net?\
+There are 2 types:\
+1. Circuit switching (dedicated circuit per call) think of telephone nets\
+2. Packet switching (data sent in discrete chunks)\
+\
+Circuit switching - end-end resources reserved for call, no sharing, link bandwidth, switch capacity\
+Circuit like(guaranteed performance) call setup required\
+(Think of pay phones)\
+Network resources are bandwidth(divided into pieces)\
+Pieces allocated to calls.  Pieces is idle if not used by owning call (no sharing)\
+Dividing link bandwidth into pieces\
+- frequency division\
+- time division\
+FDMA and TDMA\
+\
+So more bandwidth pieces given to users who call for a longer period of time and call frequently\
+\
+Question:
+\f1\fs20  
+\fs24 \cf2 \expnd0\expndtw0\kerning0
+How long does it take to send a file of 640,000 bits from host A to host B over a circuit-switched network?\
+\
+Answer: The link is 1.536 mbps but is TDM with 24 slots(time slots) one circuit uses one time slot because there are 24 users. One circuit has a bandwidth of 64 kbps (1.536 / 24)\
+\
+640000 bits = 640kb.  Time taken is 640/64 = 10 seconds + 500 msec = 10.5 seconds\
+\
+In TDM, one circuit uses 1 time slot so 1/24th of the link bandwidth\
+\
+Packet switching - different users share network resources (none is wasted)\
+Each packet uses full link bandwidth\
+Resources are USED AS NEEDED\
+\
+So: bandwidth is not divided (each packet uses full bandwidth)\
+No dedicated allocation (no bandwidth wasted)\
+no resource reservation  (shared)\
+\
+Problem: demand can exceed amount available\
+Congestion: queue for packets, wait for link use\
+Packets move one hop at a time, node receives complete packet before proceeding\
+\
+Sequence of A and B packets do not have fixed pattern, they are shared to the users on demand\
+\
+In contrast, TDM: each host gets same slot \
+\
+Packet switching allows for more users in the network\
+ex. Each user uses 100kbps when active but only active 10% of the time\
+\
+Circuit switching: 10 users so the whole link is used up even when users active 10% of the time\
+\
+\
+Packet switching: with 35 users, probability that greater than 10 are active is less than\
+0.0004 (because each user is only active 10% of the time)\
+\
+Packet switching great for bursty data (like surfing the web) because resources are shared and used as needed (no allocation, no call setup)\
+\
+Problems are there can be packet delay due to congestion and also packet loss.  Protocols are needed for reliable data transfer and congestion control\
+\
+Q: how can we get circuit like behaviour? (Allocated resources, dedicated resources, bandwidth division). Because bandwidth guarantees are needed for apps such as audio and video\
+\
+Circuit switched and packet switched fall under telecommunication networks.  Datagram networks are neither connection oriented or connectionless.  Internet is the opposite.  Circuit switched networks have TDM and FDM.\
+\
+\
+Taxonomy of networks: there are many different taxonomies, like dividing packet-switched and circuit switched.  Also dividing wired network and wireless\
+Wired: fibre and coaxial\
+Wireless: WLAN and bluetooth\
+\
+access networks and physical media:\
+Point to point access: dialup direct access to router 56kbps, can\'92t surf and phone at same time\
+\
+ADSL: asymmetric digital subscriber line (TELUS)\
+Up to 1mbps upstream\
+Up to 8 mbps downstream\
+FDM: 50 khz-1 MHz for downstream\
+4khz - 50 khz upstream\
+0 - 4 khz telephone\
+\
+Residential access to network\
+- point to point access (dial up, ADSL)\
+\
+-cable model(hybrid fibre coax asymmetric) \
+Network of cable and fibre attaches homes to ISP router,\
+- so there is shared access to router among that home\
+- issues are congestion and dimensioning\
+Deployment is available through cable companies
+\f0 \cf0 \kerning1\expnd0\expndtw0 \
+\
+Data goes from cable to fibre, there are fibre nodes in fibre wires, which send data to distribution hub, which then send data to regional cable headend which talks to the internet\
+\
+Cable and fibre will attach a home to an ISP router provided by cable company.\
+\
+Cable modem: connects computer or local network to internet service through same cable that supplies cable television service\
+\
+Servers are in the regional cable headend\
+\
+Company access: local area network\
+Company/university local area network (LAN) connects end system to edge router (think of CSIL lab computers)\
+Uses ethernet (shared or dedicated link connecting end systems and routers to servers\
+Ethernet, shared or dedicated link connects end system and router, 10mbs, 100 mbps gigabit ethernet. Deployment are institutions, home LANs\
+\
+Wireless access networks:\
+ Connects end system to router via base station (access point)\
+Connects end systems to router by way of the base station or access point\
+\
+Wireless local area networks 802.11b, (11mbps)  802.11g/n\
+Wider area wireless access (provided by telco operator, WAP/GPRS in Europe/North America\
+3G ~384 kbps\
+4G-5G\
+\
+Typical home network components\
+- ADSL (asymmetric digital subscriber line think of phones) or cable modem\
+- router/firewall\
+- ethernet(fast) dedicated or shared link connects end systems to router\
+-wireless access point (base station)\
+\
+Physical media: \
+Bit: propagates between transmitter/rcvr pairs)\
+physical link (what lies between transmitter and receiver)\
+Guided media(signals in solid media such as copper,fiber,coax)\
+Unguided media: signals propagate freely ex. Radio\
+\
+Twisted pair(TP): two insulated copper wires\
+Category 3: traditional phone wires, 10Mbps ethernet\
+Category 5: 100mbps ethernet\
+\
+Coax: coaxial cable two concentric copper conductors\
+Bidirectional\
+Baseband: single channel on cable\
+Broadband: multiple channels on cable\
+\
+Fibre optic cable: glass fibre carrying light pulses each pulse a bit\
+High speed operation point to point transmission 5Gbps\
+Low error rate: repeaters spaced far apart, immune to electromagnetic noise\
+\
+Unguided media: radio\
+Signal carried in electromagnetic spectrum\
+No physical wire\
+Bidirectional\
+Propagation environment effects (reflection, interference, obstruction by objects)\
+\
+Radio link types:\
+Terrestrial microwave: up to 45 mbps channels\
+LAN (ex WaveLAN: 2 Mbps, 11Mbps)\
+Wide area (ex cellular) e.g 3G hundreds of kbps\
+Satellite: up to 50 Mbps channel(or multiple smaller)\
+270 msec end-end delay\
+\
+Internet structure is the network of networks\
+At centre (tier 1 you have AT&T, Sprint, UUnet) provide national/international coverage\
+Treat each other as equals\
+Tier 1 ISP interconnect (peer) privately with each other\
+Tier 1 providers also interconnect at public network access points(NAPs)\
+\
+Tier 2 ISP pay tier 1 for connectivity to rest of internet, they are the customers of tier 1 provider.\
+Tier 2s are often regional, smaller and connect to one or more tier 1 ISPs and possibly other tier 2s\
+Tier 2s also peer privately with each other and interconnect at public access network points\
+\
+Tier 3s and local ISPs are last hop access network (which means they are the closest to end systems).  They are the customers of higher tiers, connecting them to rest of internet\
+\
+\
+A packet can pass through all of these tiers\
+\
+Delay in networks:\
+L = # bits of a packet\
+R = how fast the link is in bits per second\
+\
+The term is STORE AND FORWARD when an entire packet must arrive at a router before\
+It can be transmitted on next link. Also transmission delay\
+\
+Message segmenting (pipelining): divide data packet into smaller units for pipelining so that\
+Each link will work in parallel and so that delay will be reduced\
+\
+Buffer: temp storage while moving data\
+\
+so \
+1) there is transmission delay\
+And now there is packet queue delays in routers because of transmission delay. (Basically routers cannot transmit packets fast enough compared to receiving them so there is a queue of packets that build up in the buffer of the router and this causes packets queuing (delay)\
+\
+if there are no free buffers, arriving packets are lost\
+\
+In general, there are 4 types of packet delay\
+\
+1) nodal processing: when packet arrives at link, link checks for bit errors in packet and determines which link to output the packet to\
+2) queuing: link cannot output packets fast enough compared to receiving them\
+3) transmission delay: due to link bandwidth and numbers of bits in packet (time to send bits out = L/R)\
+4) propagation delay: due to the length of the medium (length of physical link) and propagation speed of the medium (in metres per second) = d/s\
+\
+Note: s and R are very different.  S is physical m/s.. R is bits per second\
+\
+So \
+\
+Delay of nodal processing is = delay of processing + delay of all other packet delays\
+Nodal processing is checking for bit errors and determining output link\
+\
+Dproc = processing delay = typically a few micro secs\
+Dqueue = queuing delay = depends on congestion\
+Trans = transmission delay = L/R\
+Dprop = propagation delay = a few microsecs to hundreds of msecs = d/s\
+\
+Queuing delay a = average packet arrival rate\
+Traffic intensity = La/R.  Think of traffic on the highway\
+R = link bandwidth(bps)\
+L = packet length (bits)\
+\
+So La/R ~ 0: average queuing delay is small\
+La/R -> 1: delays become large\
+La/R > 1: more work arriving than can be serviced, average delay infinite!\
+\
+Trace route: sender sends packets to router, router sends packets back.  Sender times the interval between transmission and reply\
+Sends three packets that will reach router i towards destination\
+\
+Three delay measurements on trace route\
+* * * means no response (probe lost, router not replying\
+\
+Packet loss: lost packet may be retransmitted by previous node(or link), by source end system or not retransmitted at all\
+\
+PROTOCOL LAYERS\
+\
+Networks are complex\
+Hosts\
+Routers\
+Links of various media (physical or not)\
+Applications\
+Protocols\
+Hardware,software\
+\
+Layering: each layer implements a service\
+Another example: SFU structure\
+\
+Why layering? Can see explicit structure of complex system\
+\
+Modularization (separate sections) eases maintenance and each change to separate section is independent and does not affect the rest of the system\
+\
+Internet protocol stack\
+\
+-applications (SMTP, FTP, STTP)\
+- transport host-host data transfer (TCP, UDP)\
+- network routing of datagrams (or packets) from source to destination)\
+- link: data transfer between neighbouring network elements\
+- physical: bits on the wire\
+\
+Each layer is distributed (each node has a stack)\
+Entities implement layer functions at each node\
+Entities perform actions, exchange messages with peers\
+\
+ex. Entity is a person\
+\
+Ex transport :\
+Take data from application\
+Add addressing, reliability check info to form \'93datagram\'94\
+Send datagram to peer\
+Wait for peer to acknowledge\
+Analogy canada post (is a form of logical communication)\
+So host-host data transfer but instead of data you transfer packages\
+\
+Each layer takes data from above in ATNLP \
+Adds header info to create new data unit (datagram)\
+Passes new data unit to layer below\
+\
+So \
+Message\
+Segment\
+Datagram\
+Frame\
+\
+There are other internet protocol stacks like ISO 7 reference model\
+Which is\
+\
+Application\
+presentation\
+Session\
+Transport\
+Network\
+Link\
+Physical \
+}

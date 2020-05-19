@@ -1,0 +1,374 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf200
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 All standards of internet are published as (request for comments)\
+\
+Internet standardization steps:\
+internet draft\
+Rfc\
+Proposed standard\
+Draft standard\
+Internet standard \
+\
+CHAPTER 2:\
+\
+Network apps: email, web, text messaging, remote login, P2P file sharing, video, audio\
+There is a UI for application level protocol\
+\
+In same host, two processes communicate using INTERPROCESS COMMUNICATION\
+Processes running in different hosts communicate with application layer protocol\
+\
+ex. Web server software communicates with browser software\
+\
+No need to write software for network-core devices (routers) because they do not run user applications\
+\
+User apps on end systems allow for rapid app development, propagation\
+Application layer protocols are one piece of an app\
+-they define messages exchanged by apps and actions taken\
+-use TCP and UDP\
+\
+App layer protocol defines types of messages exchanged\
+e.g HTTP GET \
+\
+Client-server:\
+Client requests service.  \
+Web: client implemented in browser; email: in mail reader\
+\
+Server provides service\
+e.g web server sends requested web page to client, mail server delivers email\
+Process has socket, sends/receives to/from socket. Process controlled by user/app developer\
+\
+Socket can be thought of as a door, another socket at receiving process\
+Client and server communicate via their sockets. (Send and read datagrams)\
+\
+Transport layer service\
+Data loss- some apps(audio) can tolerate it, others (file transfer) require 100% reliable data transfer\
+Timing - some apps(gaming) require low delay\
+Bandwidth - multimedia needs minimum amount of bandwidth to be effective\
+Elastic apps make use of whatever bandwidth they get\
+\
+So there are transport service requirements for different applications\
+Apps: file transfer, email, web documents, real time audio/vdieo/ stored audio/video\
+\
+Apps with their application layer protocols and transport protocols\
+Email: smtp. Remote terminal access: telnet. Web: http.  File transfer: ftp\
+Streaming multimedia: proprietary (e.g youtube)\
+Internet telephony: proprietary (e.g skype)\
+\
+Web and http:\
+Each object addressable by a URL with host name and path name\
+\
+HTTP: hypertext transfer protocol\
+Web\'92s application layer protocol\
+Uses client/server model\
+So the browser requests, receives displays web objects\
+Web server sends objects in response to requests\
+\
+Uses TCP:\
+Client creates socket by initiating tcp connection\
+Server accepts tcp connection\
+http messages exchanged between http client and http server (application layer protocol messages)\
+Tcp connection closed\
+\
+http is stateless which means that it does not retain any information about past client requests after tcp connection is closed\
+\
+Protocols that maintain state are complex because history must be maintained, and their views of the state may be inconsistent if web server/client crashes\
+\
+Two types of http messages: request and response\
+\
+Request is GET, POST, HEAD commands\
+In request message, there is a entity body, a header and a request line from bottom to top\
+\
+Uploading form input (filling out form on web page)\
+Web page often includes form input (this is using POST method)\
+Input is uploaded to server in entity body\
+\
+On the other hand, there is URL method which uses GET\
+Input is uploaded in URL field of request line\
+\
+HEAD method asks the server to leave the requested object out of response (do not respond to it)\
+Uses are for debugging\
+\
+HTTP 1.0 uses GET, POST, HEAD\
+HTTP 1.1 uses all those + PUT, DELETE\
+\
+PUT uploads a file in entity body to path specified in URL FIELD\
+DELETE deletes the file specified in URL field\
+\
+Response message will include a status line, header lines and data(like requested HTML file)\
+\
+5 sample codes in response status line\
+\
+200 OK - request succeeded, requested object in data portion of message\
+301 - moved permanently, requested object moved, new location specified later in message\
+400 bad request - request message not understood\
+404 not found - requested object not on server\
+505 http version not supported by server\
+\
+2 types of http connections: non-persistent and persistent\
+\
+Non-persistent - one object at most can be sent over a tcp connection http 1.0\
+Persistent - multiple objects can be sent over a single tcp connection, used by http 1.1\
+\
+For non persistent HTTP\
+\
+First, tcp connection must be established between client and server before http client can send an http request message (containing url into tcp connection socket, message can indicate that client wants some web object.\
+\
+Then, http server receives request message and forms a response message containing requested object\
+\
+After this, http server closes tcp connection,\
+http client receives response message containing html file, displays html, parsing html file finds 10 reference jpeg objects. This cycle then repeats\
+\
+Response time? RTT is defined as the time for a packet to travel from client to server and back.\
+So, 1RTT for connection establishment, 1RTT for message request and response, + time for web server to transmit file \
+\
+So non-persistent http response time = 2RTT + file transmission time\
+Issues with non-persistent:\
+2RTT for each object\
+Browsers open parallel TCP connections to fetch objects (need lots of TCP connections\
+There is an operating system overhead for each TCP connection\
+\
+PERSISTENT HTTP:\
+\
+- does not close tcp connection after sending response\
+- on same connection, subsequent http messages are sent between the same client/server\
+\
+Persistent can have pipelining or no pipelining\
+- without pipelining: the client issues a request only when previous response has been received.  One RTT for each object\
+\
+- with pipelining: default in http 1.1\
+Client sends multiple requests without waiting for a response\
+Can take as little as one RTT for all objects\
+\
+http request line includes request commands\
+Carriage return line feed indicates start/end of header lines\
+\
+Authorization: control access to server content\
+Is stateless which means that the client must present authorization in each request\
+if no authorization in header (in the request), server refuses access and sends WWW authenticate:\
+\
+Cookies keep \'93state\'94\
+\
+Ex. When initial http request arrives at site, the site creates a unique ID and creates entry in its backend database for that ID\
+\
+Cookies keep state and many major web sites use them\
+-Cookie header line in both response and request messages\
+-cookie kept on user\'92s host (computer) and managed by the browser\
+- there is a backend database on the website for that cookie (ID)\
+\
+So when initially visiting website, site sets cookie ID for client and stores that in a backend database\
+When the client sends an http request message again, the cookie will be in the header line and the server will go access its backend data base and send a response.  Cookie file also stored on client\'92s host and managed by browser\
+\
+Once the site sets cookie for user, the cookie for that site will be stored in both user host and client backend database.  When user sends another http request message, that cookie will be in the header line.\
+\
+Cookies can bring:\
+-authorization\
+-shopping carts\
+- recommendations\
+-user session state (web email)\
+\
+Cookies permit websites to learn about you. Search engines use them\
+\
+\
+FTP:\
+Client establishes tcp connection with server\
+Client obtains authorization over control connection\
+There is a control connection and data connection for ftp\
+\
+Control connection is where commands go through\
+When server receives a command through control connection from client for a file transfer, it opens a tcp data connection to client\
+\
+Server opens up another data connection to client for another file transfer\
+\
+Control connection is \'93out of band\'94 which means that control data (commands) are disjunct from main data (files)\
+\
+ftp server will maintain state, current directory and earlier authentication\
+\
+Client must obtain authorization over control connection\
+Data connection and control connection on different ports with 2 TCP connections\
+\
+FTP commands sent as ascii text over control channel, USER, PASS, LIST, RETR, STOR\
+\
+Ssh is secure FTP.  Can only force ssh to disconnect but cannot obtain information\
+\
+HTTP vs FTP\
+Stateless vs stateful (FTP maintains state, current directory and earlier authentication)\
+Inband control vs outband control\
+\
+ELECTRONIC MAIL:\
+SMTP\
+User agents\
+Mail servers\
+Mail transfer protocol\
+\
+User agents are outlook, sfu connect\
+Outgoing, incoming messages stored on server\
+\
+Mail servers have mailbox (for incoming messages from user)\
+Message queue (for outgoing)\
+SMTP protocol between mail servers to send email messages\
+\
+The client is the sending mail server and server is receiving mail server\
+\
+Command/response interaction\
+Commands: ascii text (messages must be in 7 bit ascii)\
+Response: status code and phrase\
+\
+So when one person wants to email another person, they use their user agent to compose a message which is sent to THEIR mail server and put in the message queue (outgoing messages)\
+The client side of SMTP (sending mail server) then establishes a connection with server side of SMTP (receiving mail server) and SMTP client sends first person\'92s message over TCP connection which is then placed In the MAILBOX of the receiving mail server.  Second person then uses his user agent to read message from mail server\
+\
+SMTP uses persistent connections\
+Both http and SMTP have ASCII command/response interaction/status codes.\
+For HTTP, object encapsulated in its own response message\
+For SMTP, multiple objects sent in multipart msg\
+\
+MIME - Multimedia extension\
+\
+MIME content in message header \
+Mime version \
+Method used to encode data\
+Multimedia data (jpeg)\
+Encoded data\
+\
+MIME types: text, image, audio, video, application\
+Coding for MIME issue is that \
+Binary data(bit string) to plain text (SMTP ascii message)\
+Simple solution: 8 bit -> one plain text symbol (think ASCII)\
+SMTP uses 7-bit ascii though so use extended ascii\
+\
+Base 64 coding:\
+65 character subset of US ASCII is used for SMTP.  6 bits can be represented per printable character.\
+\
+The 65-char subset has property that it is represented identically in all versions of ISO 646\
+\
+Called base 64 but has 65 characters (= is the 65th character)\
+\
+Characters are A-Z a-z 0-9 + / =\
+\
+SMTP to go from sending user to receivers mail server.  Mail access protocol to go from receivers mail server to receivers user agent\
+\
+POP = post office protocol\
+Has authorization phase with client user and pass and server responses with OK and -ERR\
+\
+Has transaction phase (between client and server\
+\
+Client commands:\
+list: list message numbers\
+Retr: retrieve message by number\
+Dele: delete message\
+Quit\
+\
+POP3 is stateless, bob cannot re-read email if he changes client. \
+POP3 can download and keep copies of messages on different clients\
+\
+IMAP keeps all messages in one place at server\
+-allows user to organize messages in folders\
+-stateful (keeps user state across sessions\
+\
+DNS:\
+\
+Map between ip addresses(used for addressing datagrams) and names (domain names)\
+\
+DNS is distributed database\
+Application layer protocol to translate address to name\
+\
+Cannot centralize DNS because of \
+- distance\
+-traffic volume\
+-maintennance\
+-single point of failure \
+And it doesn\'92t scale\
+\
+No server has all name to IP address translations/mappings\
+\
+Name servers can be authoritative for specific organization, providing ip to host name mappings for organization hosts\
+- can be maintained easier by organization or service provider\
+\
+Local DNS server each ISP has one also called the default name server\
+When host makes DNS query, query sent to local DNS server.\
+The local DNS server has a local cache of recent name -> IP address translation pairs\
+Local dns server acts as proxy, forwards query into hierarchy \
+\
+If local dns server can not resolve name, forwards query to root DNS server.  Root DNS server contacts authoritative name server (organization that has authoritative hostname to IP mappings)\
+\
+Root name server contancts authoritative DNS server, gets mapping, returns mapping to local DNS server. 13 root name servers worldwide\
+\
+TLD (top level domain servers) responsible for com, org, net, edu and all top level country domains: uk, ca \
+Network solutions maintains servers for .com top level domain server\
+\
+.com is a domain\
+.ca is a domain\
+.org is a domain\
+TLD responsible for these\
+Network solutions responsible for .com\
+Educause for .edu\
+\
+.ca wants IP address of .edu domain\
+Contacts local dns server\
+Local dns server contacts root name server if necessary\
+Root name server contacts authoritative name server\
+Authoritative name server returns IP address back down the call stack\
+\
+Issue tho: root name server may not know authoritative name server but it may know an intermediate name server (who to contact to find authoritative name server?)\
+\
+\
+INTERMEDIATE NAME SERVER between authoritative and root\
+\
+For query, you can have recursive or iterated. \
+\
+Recursive: heavy load at upper nodes, burden on contacted name server\
+\
+Iterated: contacted server replies with name of server to contact\
+Ask this server I don\'92t know\
+\
+Name servers usually cache mapping once they know it.  Cache entries time out after time to live TTL\
+Local name servers usually have mapping to TLD server in their cache so root name servers often not visited\
+\
+DNS: distributed db storing resource records (RR) (name, value, type,TTL)\
+Type = A \
+Name is host name\
+Value is IP address\
+\
+Type = NS\
+Name is domain\
+Value is IP address of authoritative name server for this domain\
+\
+Type = CNAME(canonical name)\
+Name alias name \
+Value: real name\
+\
+Type = MX\
+Value = name of mail server associated with name\
+\
+DNS protocol: query and reply messages with same message format\
+\
+Msg header has 16 bit identification for query, reply uses same #\
+\
+Flags: query or reply, recursion available/desired\
+Reply is authoritative\
+\
+Attacking domain name server DDoS (distributed denial of service\
+\
+Bombard root servers with traffic\
+- not successful\
+- traffic filtering\
+- local servers have TLD servers in cache so they can bypass root servers\
+\
+Bombard TLD servers\
+-more dangerous potentially\
+\
+Redirect attacks\
+- man in middle (intercept queries)\
+- dns poisoning (send bogus replies) which caches\
+\
+Exploit dns for ddos\
+- send queries with spoofed source address: target IP SPOOFED SOURCE ADDRESS TARGET IP\
+\
+\
+\
+\
+}

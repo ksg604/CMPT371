@@ -1,0 +1,190 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf400
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 in utilization of sender = L+R / RTT + L/R\
+\
+in GBN, theres only a timer for the oldest UNACKED packet.  when the receiver does not receive anything, it will continue to send an ACK for the previous packet in sequence until timer runs out.  when timer runs out, resend all transmitted packets \
+\
+GBN theres a window of up to N consecutive unacked packets, the window includes the send base (packets sent but not acked) and packets are to be sent.  GBN has not receiver buffer so all packets must be in sequence and retransmission of send base happens at timeout\
+\
+ACK only the correctly received packets with highest in-order sequence (may generate duplicate acks if a packet is lost)\
+\
+for out of order packets, discard them and re-ack packet with highest in-order sequence\
+\
+cumulative ack, some acks are lost, sender still sends packets out of sequence.\
+\
+for SR, sender only resends packets which are not acked.\
+each unacked packet has a timer\
+sender window has N consecutive sequence numbers, limits sequence numbers of send base (sent unacked packets\
+\
+selective repeat has a buffer\
+buffers out of order packets (instead of discarding them)\
+in order packets it delivers and advances window to next not yet received packet\
+\
+for all packets outside of the window, ack them\
+\
+when a lost packet is finally received, deliver all buffered packets, and send the ack for that lost packet finally\
+\
+two scenarios, receiver loses acks and sender loses packets, receiver sees no difference!\
+\
+GBN and SR are all UDP\
+\
+eRTT1 = (1\'97x)eRTT0 + x*sRTT1\
+\
+timeout interval = estimatedRTT + 4*DeviationRTT devRTT = safety margin, so larger the variation in EstimatedRTT, larger the safety margin\
+\
+flow control: sender won\'92t overflow receiver\'92s buffer by transmitting too much too fast, sender speed matches its transmission when it receives receiver\'92s estimate of receiver window\
+\
+rcv window = rcvbuffer - lastbyte received - last byte read\
+\
+goodput is when data in = data out\
+throughput is data going through\
+\
+goodput must be less than or equal to throughput\
+\
+transmission rate = congwin/RTT\
+\
+congwin is a function of perceived network congestion, too high means there is congestion, too low means not enough network utilization\
+\
+initial rate, start congwin at 1 max segment size, then double congwin every RTT by incrementing it for every ACK received\
+\
+slow start until threshold, then linear increase until congestion, then decrease congwin.  additive increase increase congwin by 1 MSS every RTT until there is a loss of packets occur. this is called probing.  after congestion, cut congwin in half\
+\
+AIMD for TCP fairness, equal share and full utilization (equal division of bandwidth amongst different TCP sessions\
+\
+linear increase of throughput with additive increase (slope of 1) so slopes of throughput are parallel, then multiplicative decrease decreases throughput for both sessions proportionally\
+\
+an app can open many connections and increase its rate\
+\
+after 3 duplicate ACKS, congwin cut in half. and then grows linearly\
+after timeout, congwin set to 0 and restart slow start (timeout is more alarming before 3 duplicate ACKS (indicates more severe congestion)\
+\
+with timeout, congwin set to 1 and threshold set to congwin/2\
+\
+with three duplicate, threshold set to congwin/2 and congwin set to threshold\
+\
+if sender is above threshold, congestion avoidance with linear additive\
+if sender blow, slow start phase\
+\
+P = number of times TCP idles at server = min\{k-1, Q\} where k is the number of qwindows, Q is numbef of times idle server s if object were of infinite size\
+\
+delay = O/R + 2RTT + P[RTT + S/R] - (2^p - 1) S/R\
+\
+for dijkstras, at a node, update all cost values to nodes you can reach, then pick the smallest cost path to an unvisited node, travel to that node, visit that node then update all cost values to nodes you can reach etc\
+\
+for bellman ford, look at a node, then look at all its adjacent nodes, compute the minimum of all the costs to those nodes from the node you\'92re looking at, plus the least cost distance from those nodes to the distance to the node (from the source) you\'92re trying to find\
+\
+each node will send its distance vectors (least cost paths to nodes) to its neighbors,  when node x receives estimate, it updates its own DV \
+\
+steps:\
+wait for new cost update from neighbor, recompute estimates for own DV, if any change, notify neighbors.\
+\
+if a nodes least costs in its DV does not change, do not notify neighbors\
+\
+class A, 1.0.0.0 to 127.555.555.555\
+class B 128.0.0.0 to 191.555.555.555\
+clas C 192.0.0.0 to 223.555.555.555\
+class D 224.0.0.0 to 239.555.555.555\
+\
+router can be thought of as a network itself with interfaces.  E on same network as router\'92s interface from ingoing interface to outgoing\
+\
+DHCP is called plug and play as well\
+\
+slotted aloha is a random access MAC\
+\
+for slotted aloha, single active node can utilize all of the bandwidth of the channel.\
+\
+if collision, node re-transmits frame in subsequent slot with probability P until success\
+if no collision, node transmission is successful and can transmit the next frame\'92\
+when node gets fresh frame, it transmits in next slot\
+\
+taking turns protocols, token passing and polling (slave and master nodes)\
+\
+ethernet uses CSMA, carrier sence, collision detection, random access ( node waits a random amount of time before attempting a retransmission)\
+\
+wireless LANs use either adhoc networks (no base station or access point) or base station and access point.  for adhoc, the wireless hosts communicate with each other (they may need to route through each other)\
+\
+collision avoidance, what if two nodes are hidden from each other?  RTS and CTS exchange (Request to send and clear to send). the hidden nodes will not transmit for a specified duration, (specified by the RTS packet). network allocation vector (NAV) prevents them from doing so\
+\
+for bluetooth, interference from wireless LANs, cordless phones and microwave ovens, frequency hopping can help.  \
+\
+before sending http request, need ip address of domain name.  ARP before dns before http.  to send frame to router, need MAC address of interface of router (need ARP for this).  after, client now knows MAC address of first hop router so can send dns query to dns server.\
+\
+dns query routed through autonomous systems until it reaches dns server, dns server replies with Ip addresss.  ip address retrieved, make an http request from server now with tcp.  tcp handshake for that (establish the ocnnection first).  then, http request into tcp socket, ip datagram with http routed to google.com server, web server replies with http reply (containing the web page)\
+\
+the IP datagram containing the http reply is routed back to the client\
+\
+CDMA is MAC protocol.  CDMA mostly used in wireless broadcast channels (cellular, satellite)\
+\
+a code assigned to each user (code set partitioning) this is called their chipping sequence and it is used to encode their data.  all users will share the same frequency. but has their own chipping sequence to encode their data.  encoded signal = original data * chipping sequence.  in order to decode the encoded signal, receiver has their own version of the chipping sequence.  all they need to do is take the product of the encoded signal and the chipping sequence in order to obtain the data\
+\
+CDMA analogy is public key encryption.  \
+\
+for FDMA, the channel is partitioned into frequency bands  each client assigned a fixed frequency band,  receiver will determine which client is which by retrieviing a specific frequency on a specific frequency band.  problem is that some frequency bands will be idle\
+\
+TDMA (time division multiple access)\
+\
+access to channel will be in rounds.  each station will get a partition in the round (6 stations then 6 partitions in the round, 1 slot for each station.  fixed length slot for each station.  6 station LAN.\
+\
+problem with this is unused slots (if a station has no packets to send) will go idle same as FDMA\
+\
+multiple access protocol, single shared broadcast channel, two or more simultaneosu transmissions by nodes = interference so only one node can send successfully at a time\
+\
+two types of links, point to point and broadcast\
+\
+broadcast: \
+\
+traditional ethernet,\
+wireless lan\
+satellite\
+\
+error detection: may have error detection field in a datagram\'92s field.  the larger the error detection and correction bits field (EDC field, the better detection and correction.) error detection is however not 100% reliable. when you send a datagram through a link, it will be prone to bit errors which can be solved be incorporating an EDC field.  if you send datagram through a bit error prone link,  there is a check using the EDC field to determine if there is an error in the data field or not.  if yes, modify EDC field, if no error, deliver up to application layer\
+\
+transportation analogy for link layer.  \
+\
+link layer protocols = type of transportation (tplane, train)\
+tourist = datagram\
+transport segment (road, air) = communication link (between nodes)\
+travel agent = routing algorithm.\
+\
+delay = 2RTT + O/R + P[RTT + S/R] - (2^p -1) * S/R\
+\
+ipv6 has priority in its header (increased speed) flow label and next header\
+\
+dual stack and tunneling for ipv4 and ipv6 datagrams\
+\
+tunneling, ipv6 carried as payload, dual stack, routers translate between formats\
+\
+rate = congwin / RTT\
+\
+timeout interval = estimatedRTT + 4DEVRTT\
+\
+performance of rdt 3.0 L/R / RTT + L/R\
+\
+GBN window size < sequence number space\
+\
+SR window size <= 1/2 sequence number space\
+\
+performance of rdt 3.0 is bad because it is a stop and wait protocol\
+\
+in contrast, SR and GBN are pipelined protocols \
+\
+rdt 2.2 is NAK free receiver only sends acks for pkts it receives, sender will retransmit a pkt if it keeps receiving previous in order sequence acks\
+\
+rdt 2.1 can handle corrupted pkts, but not lost pkts\
+\
+rdt 2.0 can handle pkts with bit errors but not corrupted or lost pkts\
+\
+rdt 1.0 assumes that the channel is perfectly reliable, no bit errors or loss of packets or corrupted pkts\
+\
+checksum, add bits , any wraparound bits that are MSB are added on to the final sum, then you take the one\'92s complement by inverting all the bits\
+\
+there is a UDP because it requires no connection establishment, small segment header and no congestion control\
+\
+connection oriented demultiplex, one socket per client in the server\
+\
+connectionless: clients can connect to the same socket}

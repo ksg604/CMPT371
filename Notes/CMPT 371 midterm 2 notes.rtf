@@ -1,0 +1,430 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf200
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 CMPT 371 Midterm 2 \
+\
+Transport Layer\
+\
+Transport layer provides logical communication between hosts\
+- they run in end systems\
+\
+Sending side: uses message segmentation to break app messages into segments and passes this to the network layer\
+\
+Receiving side: reassembles this and passes it to the app layer.\
+\
+Transport vs network?\
+\
+Network layer is the logical communication between routers (nodes)\
+- uses point-to-point\
+\
+Transport layer is the logical communication between hosts (end-to-end)\
+-relies on and enhances network layer\
+-also called end-to-end\
+\
+Network layer protocol would be postal service in a household analogy\
+Transport layer protocol would be parents\
+\
+Kids are processes\
+X-mas cards they make are the app messages\
+Hosts = houses\
+\
+Sending side multiplexes (break app message into segments)\
+\
+Receiving side de-multiplexes (reassemble back into message\
+\
+TCP has reliable, in-order delivery\
+- congestion control\
+- flow control\
+- establish connection\
+\
+UDP\
+- unordered, unreliable delivery\
+\
+Services not available for both protocols:\
+- bandwidth guarantees\
+-delay guarantees\
+\
+Demultiplexing at receiving host is the process of:\
+- delivering received segments to the correct socket\
+\
+Multiplexing at send host is the process of:\
+-getting data from multiple sockets, enveloping data with header (so that it can be used for demultiplexing)\
+\
+A socket is one endpoint.  Sockets are bound to a port number so that TCP can identify the application that data is supposed to be sent to.  Endpoint is a combination of IP address and port number\
+\
+Host will receive IP datagrams (similar to packets)\
+\
+- datagrams will have source IP address and destination IP address\
+- every datagram will carry 1 transport-layer (UDP or TCP) segment\
+- that TCP segment will have a source port number and destination port number\
+- host uses IP addresses and port numbers to direct segment to appropriate socket\
+\
+segments hold the data (application data(message)) segments have header fields for source and dest port number\
+Segments have fields for\
+- header fields\
+- data\
+\
+Connectionless demux (UDP):\
+Remember - created socket has local port#\
+\
+When host receives a UDP segment (receiving end):\
+- it checks the destination port # in the segment\
+- then it directs that UDP segment to socket with that port #\
+\
+IP datagrams with the same dest port# and different source ip addresses/port numbers will still be directed to the same socket\
+\
+So connectionless-demux is UDP.\
+Basically create a socket with a local port number\
+When that host receives a segment, it checks the dest port# in the segment and directs that segment to the socket\
+\
+Connection-oriented demux:\
+\
+A TCP socket is identified by 4-tuple\
+- source ip\
+ -dest ip\
+- source port\
+- dest port\
+\
+Receiving host will use all these 4 values to direct a segment to the appropriate socket\
+\
+Advantages of 4-tuple sockets,\
+- server host may support many sockets identified by its own 4-tuple\
+- web servers have different sockets for each connecting client\
+\
+\
+- non-persistent HTTP will have different socket for each request\
+\
+Multi-threaded server, can handle multiple simultaneous service requests in parallel\
+\
+UDP:\
+\
+Udp segments can be lost (unreliable protocol) and delivered out of order \
+Unordered and unreliable\
+\
+It is connectionless: \
+\
+- so no connection establishment between sender and receiver\
+- each UDP segment handled independently\
+\
+WHY UDP?\
+\
+- faster because no connection establishment (which adds delays)\
+- simple: no connection state at receiving end and sending end\
+- small segment header (simple)\
+- no congestion control so it is faster\
+\
+-often used for multimedia streaming apps because it is loss tolerant and rate sensitive\
+-DNS uses UDP\
+-if you want reliable transfer over UDP, add reliability at application layer. Which is application specific error recovery\
+\
+Length in header portion of UDP segment indicates UDP length\
+\
+UDP checksum goal is to check for errors (e.g flipped bits) in the transmitted segment\
+\
+Sender side: treat segment contents as sequence of 16-bit ints\
+Checksum: addition of segment contents (1\'92s complement)\
+Sender puts this checksum into UDP checksum field\
+\
+Receiving side: compute checksum of received segment (sum of sequence of 16-bit ints)\
+- check if checksum = UDP checksum\
+\
+When computing checksum, carryout from MSB adds 1 to the sum after computation\
+\
+Reliable data transfer:\
+\
+Send side:\
+Rdt send called by app layer,  passes data to deliver to receiver in the upper layer\
+Udt send called by rdt to transfer packet over unreliable channel to receiver\
+\
+Receiving side: \
+rdt_rcv called when packet arrives at receiving side of channel\
+deliver_data called by rdt to deliver data to upper layer\
+\
+Unreliability:\
+Bit error\
+Packet loss - congestion\
+Delays - too long\
+\
+FSMs to represent sender/receiver\
+\
+Events causing state transition / actions taken on state transition\
+\
+Reliable transfer over reliable channel\
+- no packet loss\
+- no bit errors\
+\
+Separate FSM for sender and receiver\
+\
+Sender waits for call from above (rdt_send) then sends data into underlying channel\
+Receiver waits for call from below (rdt_rcv) then reads data from underlying channel\
+\
+This is RDT 1.0\
+\
+RDT 2.0:\
+- the underlying channel may flip bits in packets (use checksum to detect these errors)\
+How to fix? Receiving side sends acknowledgements\
+ACK for packet OK\
+NAK for packet with errors\
+\
+new in RDT 2.0:\
+- errors detection (checksum)\
+- receiver feedback (control msgs ACK and NAK from receiver to sender)\
+\
+rdt 2.0 stop and wait operation is that the sender sends a packet and waits for the receiver to respond with acknowledgements before sending another one.  \
+\
+Problems with rdt 2.0\
+\
+- what if ACK and NAK get corrupted? Sender won\'92t know what happened to receiver\
+- what do we do? Sender retransmits packet assumes it is NAK (this might cause packet duplications though)\
+\
+To handle this, sender adds a sequence number to each packet\
+- sender re-transmits if ACK/NAK is garbled\
+- if ACK/NAK not garbled, receiver discards duplicate packet (it does not deliver it up) and checks the packets based on their sequence number\
+\
+RDT 2.1 adds features that\
+Sender adds sequence number to a packet\
+Receiver has to now check if the received packet is a duplicate\
+\
+Sender has twice as many states because it has to remember whether the current packet it is waiting for has sequence number 0 or 1\
+\
+Receiver must check if a received packet is a duplicate.  The state indicates whether 0 or 1 is expected sequence\
+\
+width of Sequence # field is limited\
+How many sequence numbers? 2 will be okay\
+Why only 2 sequence numbers? Because the operation is stop and wait where sender sends one packet and waits for receiver response\
+\
+RDT 2.2: NAK free protocol\
+- receiver only sends ACKs for packet received OK.  Receiver must explicitly include sequence numbers of packets being ACKED\
+-duplicate ACK at sender (receiving end will send ACKs for the last packet it received that was OK). \
+- if the sending side receives duplicate ACKs for last packet, it will resend current one\
+\
+If ACK is corrupt, sender retransmits.  If packet is corrupt, receiver will send duplicate ACK for previous packet sent by sender.\
+\
+RDT 3.0 has assumption that the underlying channel can lose packets (data or ACKs)\
+\
+- sender waits for ACK, if pkt is duplicate, retransmitted will be duplicate but sequence number takes care of this.\
+\
+- receiver must specify seq number of pkt being acked\
+\
+-this all requires a countdown timer\
+\
+If packet lost in channel, countdown timer runs out and sender retransmits\
+If ACK lost in channel, countdown timer runs out and sender retransmits packet, receiver detects duplicate and re-sends ACK\
+Sender re-transmits packet for either lost ACK or lost packet\
+\
+Premature timeout can cause an unordering\
+\
+T = L / R to transmit all packet bits + RTT time\
+So t = RTT + L/R\
+\
+For stop and wait, sender sends one packet then waits for receiver response\
+\
+Utilization of sender = time to transmit 1 packet / total time for round trip + transmit\
+\
+Pipelining : needs buffer at receiver and/or sender\
+More sequence numbers needed\
+\
+Pipelining increases utilization (fraction of time that sender busy sending)\
+\
+Two types of pipelined protocols\
+-GBN (receiver has no buffer and accepts packet in order)\
+GBN has cumulative acks for packets\
+Sender has timer for oldest unacked packet\
+\
+SR\
+- has receiver buffer (receives out of order packets\
+- individual ack for each packet\
+-sender has timer for each unacked packet (when timer expires, retransmit oney that unacked packet)\
+\
+\
+For GBN, timer starts at the first packet (oldest unacked packet) that is unacked.  After this packet, receiver will not ack consecutive packets because not in order, it will keep sending ACKs for the previous packet.  Finally, sender will get ACKs for packets successfully acked.  Then, timer for the first packet to be unacked runs out and sender will transmit all unacked packets.\
+\
+Each packet has k-bit sequence number in its header\
+A window of up to N will allow consecutive unacked packets (sliding window\
+\
+Discard packets that are out of order\
+\
+Problems with GBN: cumulative ack and premature timeout\
+\
+Problems with cumulative ack, first few can be lost, last can be received, then sender thinks it should send next seq number packet .\
+\
+Premature timeout when ack for pkt takes longer to come back than the timer.\
+\
+Selective repeat, not in order acknowledgement, individual ack all correctly received packets.  \
+Buffers packets for eventual in-order delivery\
+\
+- sender only resends pkts for which ack not received, timer for each unacked packet\
+-  sender window N consecutive seq #s, limits seq #s of unacked pmts\
+-sender only resends pkts for which ack not received\
+\
+For sender, if n is the smallest unacked packet, advance window to next unacked seq #\
+\
+For receiver, delivery is in-order, advance window to next not yet received pkt \
+\
+Pkt n in ACK(n)\
+\
+For sender, window advances if pkt is acked\
+For receiver, window advances when pkts received and delivered\
+\
+Buffering only occurs during timeout, sent packets are buffered until the packet that caused timeout is received \
+\
+Selective repeat, if receiver receives all pkts but sender gets no acks due to loss, receiver window will advance but sender will re-transmit duplicate pkt which will be accepted as a new pkt because of the new receiver window\
+\
+receiver sees no difference vs if the sender loses a packet\
+\
+For bursty loss, selective repeat is better, sporadic loss, GBN is better\
+\
+GBN is less complicated\
+\
+Tcp header has seq number, ack number, dest port, source port\
+Tcp header is 20 bytes\
+Udp header is 8 bytes\
+\
+How to set tcp timeout val?\
+Too short premature\
+Too long low efficiency and slow reaction to segment loss\
+\
+sampleRTT: measured time from segment transmission until ACK receipt\
+How to estimate rtt? Hard because of retransmissions\
+Also hard because sampleRTT will vary, we need average of recent measurements not just current sample RTT\
+\
+Estimating RTT:\
+Influence of past sample decreases fast\
+\
+Let alpha = x\
+\
+EstimatedRTT2 = (1-x)(EstimatedRTT1 + xSampleRTT2) formula for estimating RTT\
+Depends on number of samples\
+\
+Setting the timeout interval: estimatedRTT + safety margin\
+- large variation in estimatedRTT = larger safety margin\
+- deviation of RTT = DevRTT\
+\
+Timeout interval = Estimated RTT + 4*DeviationRTT\
+\
+TCP creates RDT service on top of IP\'92s unreliable service, has pipelined segments, cumulative acks\
+-uses single re-transmission timer\
+-re-transmissions triggered by timeouts and duplicate acks\
+\
+TCP has a buffer on receiving side which has flow control, reading from buffer app will be slow, has speed matching service send rate to app drain rate\
+\
+TCP receiver informs sender about spare room in buffer, sender adjusts transmission rate accordingly\
+\
+Receiver estimates rcv window, informs sender about rcv window, sender controls transmission rate by limiting # of unacked segments to rcvwindow\
+\
+That is FLOW CONTROL\
+\
+For GBN, window size = seq # space - 1\
+Window size has to be smaller in GBN\
+\
+For SR, window size <= 1/2 seq # space\
+\
+Connection management:\
+\
+Sender and receiver establish connection by intiializing TCP variables (flow control info, buffers, seq # space)\
+\
+1. Client host sends TCP syn segment specifying initial seq # space\
+2. Server host receives it, replies with SYNACK segment, server allocates buffers, specifies server seq # space\
+3. Client receives SYNACK, replies with ACK segment which may contain data\
+\
+Vulnerable to denial of service because an attack can send a lot of SYN requests to server in order to consume enough server resources to make system unresponsive to legitimate traffic\
+\
+SYN -> SYNACK -> ACK\
+\
+ACK segment may contain data\
+\
+Three way handshake is not perfect but is good enough for practical reasons \
+\
+CONGESTION CONTROL\
+\
+-sender controls sending rate \
+- flow control (don\'92t overwhelm receiver)\
+- congestion control (don\'92t overwhelm network)\
+\
+Good put = amount of data received = amount of data sent\
+In congestion, amount of data sent > amount of data sent\
+\
+When congested, more retransmission needed (due to packet loss due to buffer overflow or large delays)\
+\
+If packet dropped, any upstream transmission is wasted\
+\
+Two approaches to congestion control\
+- network routers provide feedback to end systems, specify explicit rate sender should send at\
+This is fast, accurate by expensive (network assisted congestion control)\
+\
+- end-end congestion control: no explicit feedback from network, congestion is inferred from end-system, observes loss or delay.  This approach is taken by TCP\
+\
+Sender limits transmission: lastbytesent-lastbyteacked < congwin < min(congwin,rcvwindow)\
+\
+Rate = congwin/RTT bytes/sec\
+\
+congwin is a dynamic function of perceived network congestion\
+\
+If congwin is high, congestion\
+If low, then there is low network utilization\
+\
+Slow start: congwin is initially 1 max segment size when connection begins\
+Then, congwin increases.  The larger congwin, larger the rate.  Rate increases exponentially until a threshold due to resources\
+\
+When connection begins, increase rate exponentially.  Starting at congwin = 1 MSS.  Double congwin every RTT or increment RTT for every ACK received\
+\
+So, initial rate is slow but ramps up fast until threshold, then increase is linear thereafter\
+\
+Slow start -> threshold - > linear increase (additive) -> explore bandwidth (until we reach bandwidth or respectable rate) -> congestion\
+\
+Sender perceives congestion by loss event (receiver does not get packets or packets are lost when travelling)\
+Tcp sender will reduce rate (congwin) after loss event.   If loss event, we know there is congestion so we reduce congwin\
+\
+Sender reaction is to divide congwin by 2\
+\
+Additive increase: increase congwin by 1MSS instead of doubling it.  keep doing this in the absence of loss events.  This is called PROBING.\
+\
+Multiplicative decrease: cut congwin in half saw tooth\
+\
+why aimd? TCP fairness:\
+- equal share\
+- full utilization.\
+\
+If link bandwidth bottleneck is R, K sessions, each session should have R/K rate\
+\
+Why is it fair? In the case of 2 competing sessions, additive increase gives a slope of 1 (linear) as throughput increases.  Multiplicative decrease decreases throughput proportionally between both sessions. \
+\
+Congestion avoidance through linear additive increase of congwin.  \
+\
+Multimedia apps do not use TCP because they do not want rate throttled by congestion control, UDP pump audio/video at constant rate and can tolerate packet loss\
+\
+Determine loss of packet by timeout OR receiving 3 duplicate ACKS.  If receive 3 duplicate ACKS, congwin is cut in half and window grows linearly\
+\
+If timeout: congwin set to 1MSS, window restarts and grows exponentially again to threshold then grows linearly (so basically if timeout, restart slow-start)\
+\
+3 duplicate ACKS, cut congwin in half, grow linearly\
+\
+3 dup ACKS indicates that the network is still capable of delivering some segments, timeout is more alarming\
+\
+Threshold is when will exponential increase switch to linear?\
+Threshold value is set when at loss event, threshold set to half of congwin just before loss event (congwin val still high at this point)\
+\
+Ignoring congestion, delay influenced by \
+- connection establishment\
+- slow start\
+- data transmission delay \
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 Window size > RTT + S/R\
+\
+Connection establishment: 2RTT\
+Slow start: time server idles due to slow start = P\
+Data transmission: O/R transmission\
+\
+S = max segment size so\
+0/S = # segments to send\
+Q = numbers of times the server idles if the object were of infinite size\
+P = min(K-1, Q)\
+\
+Delay for one object is 2RTT + O/R + P[RTT + S/R\
+\
+}
